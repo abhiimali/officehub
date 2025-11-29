@@ -1,0 +1,58 @@
+<nav class="sidebar" [class.collapsed]="collapsed">
+
+  <!-- Brand + Collapse Toggle -->
+  <div class="top-section">
+    <div class="brand" *ngIf="!collapsed">
+      <span class="brand-icon">🏢</span>
+      <span class="brand-text">OfficeHub</span>
+    </div>
+
+    <button class="toggle-btn" (click)="toggleSidebar()" [attr.aria-label]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+      <span class="material-icons">
+        {{ collapsed ? 'chevron_right' : 'chevron_left' }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Profile -->
+  <div class="profile-section">
+    <div class="profile-icon">
+      <span class="material-icons">account_circle</span>
+    </div>
+
+    <div class="profile-meta" *ngIf="!collapsed">
+      <h4>Abhijit Mali</h4>
+      <small>Admin</small>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider"></div>
+
+  <!-- Tools Section -->
+
+  <!-- Spacer to push bottom content down -->
+  <div class="spacer"></div>
+
+  <!-- Shortcut actions -->
+  <div class="section-label" *ngIf="!collapsed">QUICK ACCESS</div>
+  <div class="shortcut-actions">
+    <button *ngFor="let s of shortcuts; let i = index"
+            [routerLink]="s.route"
+            routerLinkActive="active"
+            [attr.title]="s.label"
+            [style.animation-delay]="i * 0.05 + 's'">
+      <span class="material-icons">{{ s.icon }}</span>
+      <span class="shortcut-label" *ngIf="!collapsed">{{ s.label }}</span>
+    </button>
+  </div>
+
+  <!-- Logout -->
+  <div class="bottom-actions">
+    <button class="logout-btn" routerLink="/logout">
+      <span class="material-icons">logout</span>
+      <span *ngIf="!collapsed">Logout</span>
+    </button>
+  </div>
+
+</nav>

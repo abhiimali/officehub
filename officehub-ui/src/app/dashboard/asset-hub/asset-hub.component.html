@@ -1,0 +1,139 @@
+<div class="asset-hub-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="goBackToTools()">
+        <span class="material-icons">arrow_back</span>
+        <span>Back to Tools</span>
+      </button>
+      <div class="header-title">
+        <h1>Asset Hub</h1>
+        <p>Manage your assigned assets and submit new requests</p>
+      </div>
+    </div>
+    <button class="request-btn" (click)="openRequestModal()">
+      <span class="material-icons">add_circle</span>
+      <span>Request Asset</span>
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <span class="material-icons">inventory_2</span>
+      </div>
+      <div class="stat-content">
+        <h3>{{ myAssets.length }}</h3>
+        <p>Active Assets</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+        <span class="material-icons">pending_actions</span>
+      </div>
+      <div class="stat-content">
+        <h3>{{ myRequests.length }}</h3>
+        <p>Pending Requests</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Assets Section -->
+  <div class="section">
+    <div class="section-header">
+      <h2>My Assets</h2>
+      <span class="section-count">{{ myAssets.length }} items</span>
+    </div>
+    <div class="assets-grid">
+      <div *ngFor="let asset of myAssets" class="asset-card">
+        <div class="asset-header">
+          <span class="material-icons asset-icon">{{ 
+            asset.category === 'Laptop' ? 'laptop_mac' : 
+            asset.category === 'Mobile' ? 'smartphone' : 
+            'monitor' 
+          }}</span>
+          <span class="asset-status" [ngClass]="getStatusClass(asset.status)">
+            {{ asset.status }}
+          </span>
+        </div>
+        <div class="asset-body">
+          <h3>{{ asset.name }}</h3>
+          <div class="asset-details">
+            <div class="detail-row">
+              <span class="detail-label">Category:</span>
+              <span class="detail-value">{{ asset.category }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Serial:</span>
+              <span class="detail-value">{{ asset.serialNumber }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Assigned:</span>
+              <span class="detail-value">{{ formatDate(asset.assignedDate) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Requests Section -->
+  <div class="section">
+    <div class="section-header">
+      <h2>My Requests</h2>
+      <span class="section-count">{{ myRequests.length }} pending</span>
+    </div>
+    <div class="requests-list">
+      <div *ngFor="let request of myRequests" class="request-card">
+        <div class="request-icon">
+          <span class="material-icons">description</span>
+        </div>
+        <div class="request-content">
+          <h3>{{ request.assetType }}</h3>
+          <p>{{ request.reason }}</p>
+          <span class="request-date">Requested on {{ formatDate(request.requestDate) }}</span>
+        </div>
+        <span class="request-status" [ngClass]="getStatusClass(request.status)">
+          {{ request.status }}
+        </span>
+      </div>
+      <div *ngIf="myRequests.length === 0" class="empty-state">
+        <span class="material-icons">inbox</span>
+        <p>No pending requests</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request Modal -->
+  <div class="modal-overlay" *ngIf="showRequestModal" (click)="closeRequestModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Request New Asset</h2>
+        <button class="close-btn" (click)="closeRequestModal()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-description">Select the type of asset you need</p>
+        <div class="asset-types-grid">
+          <div *ngFor="let type of availableAssetTypes" 
+               class="asset-type-card"
+               [class.selected]="selectedAssetType === type.name"
+               (click)="selectedAssetType = type.name">
+            <span class="material-icons">{{ type.icon }}</span>
+            <span>{{ type.name }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeRequestModal()">Cancel</button>
+        <button class="btn-primary" 
+                [disabled]="!selectedAssetType"
+                (click)="submitRequest()">
+          Submit Request
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

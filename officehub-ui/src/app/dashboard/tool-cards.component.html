@@ -1,0 +1,22 @@
+<div class="tools-container">
+  <div class="header">
+    <h1>Welcome to OfficeHub</h1>
+    <p>Select a tool to get started</p>
+  </div>
+
+  <div class="tool-cards">
+    <div *ngFor="let tool of tools; let i = index" 
+         class="tool-card" 
+         (click)="navigateToTool(tool.route)"
+         [style.animation-delay]="i * 0.1 + 's'">
+      <div class="icon-wrapper" [style.background]="tool.color">
+        <span class="material-icons">{{ tool.icon }}</span>
+      </div>
+      <h3>{{ tool.name }}</h3>
+      <button class="launch-btn">
+        <span>Launch</span>
+        <span class="material-icons">arrow_forward</span>
+      </button>
+    </div>
+  </div>
+</div>
