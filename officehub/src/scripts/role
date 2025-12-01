@@ -1,0 +1,20 @@
+CREATE TABLE role (
+    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+    tenant_id     BIGINT NOT NULL,
+    name          VARCHAR(100) NOT NULL,   -- e.g. "ORG_ADMIN", "HR", "EMPLOYEE"
+    description   VARCHAR(255),
+    system_role   BOOLEAN NOT NULL DEFAULT FALSE,  -- true for ORG_ADMIN
+    created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT uk_role_tenant_name UNIQUE (tenant_id, name)
+);
+
+CREATE TABLE role_entitlement (
+    id              BIGINT PRIMARY KEY AUTO_INCREMENT,
+    role_id         BIGINT NOT NULL,
+    entitlement_id  BIGINT NOT NULL,
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_role_entitlement UNIQUE (role_id, entitlement_id),
+    CONSTRAINT fk_role_entitlement_role FOREIGN KEY (role_id) REFERENCES role(id),
+    CONSTRAINT fk_role_entitlement_ent FOREIGN KEY (entitlement_id) REFERENCES entitlement(id)
+);

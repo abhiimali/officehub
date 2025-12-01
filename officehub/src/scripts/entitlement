@@ -1,0 +1,54 @@
+CREATE TABLE entitlement (
+    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+    code          VARCHAR(100) NOT NULL UNIQUE,  -- e.g. "user.create"
+    name          VARCHAR(150) NOT NULL,         -- e.g. "Create Users"
+    module        VARCHAR(50)  NOT NULL,         -- e.g. "USER", "ROLE", "ROOM", "ASSET", "ORG"
+    action        VARCHAR(50)  NOT NULL,         -- e.g. "CREATE", "VIEW"
+    description   VARCHAR(500),
+    created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO entitlement (code, name, module, action, description)
+VALUES
+  -- ORG
+  ('org.view',           'View Organization Settings',       'ORG',   'VIEW',   'View organization profile and configuration'),
+  ('org.update',         'Update Organization Settings',     'ORG',   'UPDATE', 'Update organization name, logo, settings'),
+  ('org.roles.manage',   'Manage Roles & Permissions',       'ORG',   'MANAGE', 'Create and edit roles and entitlements'),
+  ('org.subscription.view', 'View Subscription & Tools',     'ORG',   'VIEW',   'View current subscription and tools'),
+
+  -- ROLE
+  ('role.view',          'View Roles',                       'ROLE',  'VIEW',   'View all roles in the organization'),
+  ('role.create',        'Create Roles',                     'ROLE',  'CREATE', 'Create new roles'),
+  ('role.update',        'Update Roles',                     'ROLE',  'UPDATE', 'Rename roles and modify attributes'),
+  ('role.delete',        'Delete Roles',                     'ROLE',  'DELETE', 'Delete roles that are not in use'),
+  ('role.assign',        'Assign Entitlements to Roles',     'ROLE',  'MANAGE', 'Map entitlements to roles'),
+
+  -- USER / EMPLOYEE
+  ('user.view',          'View Users',                       'USER',  'VIEW',   'View list of users/employees'),
+  ('user.create',        'Create Users',                     'USER',  'CREATE', 'Invite/create new users'),
+  ('user.update',        'Update Users',                     'USER',  'UPDATE', 'Update user details'),
+  ('user.delete',        'Delete Users',                     'USER',  'DELETE', 'Deactivate or delete users'),
+  ('user.assign.role',   'Assign Roles to Users',            'USER',  'MANAGE', 'Assign one or more roles to a user'),
+
+  -- ROOM
+  ('room.view',          'View Rooms & Availability',        'ROOM',  'VIEW',   'View meeting rooms and schedules'),
+  ('room.create',        'Create Rooms',                     'ROOM',  'CREATE', 'Add new meeting rooms'),
+  ('room.update',        'Update Rooms',                     'ROOM',  'UPDATE', 'Edit room details and capacity'),
+  ('room.delete',        'Delete Rooms',                     'ROOM',  'DELETE', 'Remove rooms'),
+  ('room.book',          'Book Rooms',                       'ROOM',  'BOOK',   'Create room bookings'),
+  ('room.cancel',        'Cancel Room Bookings',             'ROOM',  'CANCEL', 'Cancel existing bookings'),
+
+  -- ASSET
+  ('asset.view',         'View Assets',                      'ASSET', 'VIEW',   'View list of assets'),
+  ('asset.create',       'Create Assets',                    'ASSET', 'CREATE', 'Create/register new assets'),
+  ('asset.update',       'Update Assets',                    'ASSET', 'UPDATE', 'Modify asset information'),
+  ('asset.delete',       'Delete Assets',                    'ASSET', 'DELETE', 'Remove assets'),
+  ('asset.assign',       'Assign Assets to Users',           'ASSET', 'ASSIGN', 'Assign asset to a user'),
+  ('asset.return',       'Register Asset Return',            'ASSET', 'RETURN', 'Mark asset returned'),
+  ('asset.audit',        'View Asset History & Audit',       'ASSET', 'AUDIT',  'View asset usage history and audits'),
+
+  -- EMAIL / NOTIFICATION
+  ('email.invite',       'Send User Invites',                'EMAIL', 'SEND',   'Send onboarding / invite emails'),
+  ('email.broadcast',    'Send Broadcast Emails',            'EMAIL', 'SEND',   'Send broadcast emails to org members');
+
